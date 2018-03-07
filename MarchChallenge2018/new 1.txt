@@ -1,0 +1,124 @@
+Please use this Google doc to code during your interview. To free your hands for coding, we recommend that you use a headset or a phone with speaker option.
+
+class EncodedWordDetector { 
+
+private:
+string baseWord;	// Store the word we will compare to
+public: 
+  EncodedWordDetector(const string& secret); 
+  bool isPotentiallyEncodedWord(const string& test) const; 
+}; 
+
+We regard any word as a potential encoding of another if there exists a bijective (1:1) mapping of the characters of the secret word to the test word. 
+e.g. "cololo" is a possible encoding of "banana", 
+but "x" and "xxxxxx" is not. 
+
+
+Bijective mapping: f:A -> B (onto, 1-1)
+Encoded Word implies a mapping from character -> character,
+ Are characters alpha, or numeric (i.e. a-z, A-Z, 0-9, ASCII?)
+
+EncodedWordDetector::EncodedWordDetector(const string& secret) {
+	// Assuming that secret is non-empty
+	baseWord = secret;
+}
+
+bool EncodedWordDetectorisPotentiallyEncodedWord(const string& test) const {
+
+}
+
+// Plan to attack
+char base[] = {‘a’,’b’,’c’};
+char test[] = {‘b’,’c’,’d’};
+char difference[] = test - base = {‘b’-’a’, …}
+
+// If a word can be encoded
+base[] = {cololo};
+test[] =  {banana}
+difference = {y, x, z, x, z, x}
+
+//
+bool usedCharactesr[256] = initialized to false
+char mapping[256];
+Iterate through base word and test word
+at position i, map base[i] -> test[i],
+if(mapping does not exist) calcualte the mapping, otherwise create mapping
+mapping[base[i]] = test[i];
+usedCharacter[base[i]] = true;
+
+base[] = {cololo};
+test[] =  {banana}
+
+mapping[(int) ‘c’] = ‘b’;
+mapping[(int) ‘o’] = ‘a’;
+mapping[(int) ‘l’] = ‘n’;
+mapping[(int) ‘o’] = ‘a’;
+mapping[(int) ‘l’] = ‘n’;
+mapping[(int) ‘o’] = ‘a’;
+
+Create a new string, using the mapping (base ->mapping(base)), and then compare the two strings using strcomp.
+
+EncodedWordDetector::EncodedWordDetector(const string& secret) {
+	// Assuming that secret is non-empty
+	baseWord = secret;
+}
+
+bool EncodedWordDetectorisPotentiallyEncodedWord(const string& test) const {
+	
+	if(baseWord.length() != test.length()) return false;
+
+	// Mapping array
+char mapping[256];
+for(char& c : mapping)
+	c = -1;
+
+// Generate the mppaing from baseWord to test
+for(int i = 0; i < baseWord.length(); i++) {
+	
+	char c = baseWord[i];
+
+	// Character c, has not been encounted before
+	if(mapping[c] == -1) {
+		mapping[c] = test[i];
+	}
+}
+	
+
+// Ensure 1-1 of the bijection. A bijection does not exist, if any character in the array mapping is a repeat. Repeat meaning: c -> b a->b
+
+// Say c->b as indicated by mapping[‘c’] = ‘b’;
+// uniqueMapping[‘a’] = ‘b’
+// unordered_map -> non-unique
+// a->b a->c
+// myUnorderedMap[‘a’] = {a,c};
+// map -> unique
+map<int,char> uniqueMapping;
+for(int i = 0; i < mapping.size(); i++){
+	if(mapping[i] != -1) {
+		if(uniqueMapping.find(mapping[i]) == uniqueMapping.end()){
+			return false;
+		}
+}
+		else {
+uniqueMapping.insert(make_pair(i, mapping[i]);
+}
+	}
+	}
+
+	string newBase(baseWord);
+	for(int i = 0; i < baseWord.length(); i++) {
+		newBase[i] = mapping[newBase[i]];
+	}
+
+	string newBase = “”;
+	for(int i = 0; i < baseWord.length(); i++) {
+		newBase += mapping[baseWord[i]];	// O(n^2) n = baseWord.length
+	}
+
+	return (newBase.strcomp(test) == 0);	//strcomp returns 0 if ==
+
+}
+
+c++11, 14,17 Programming
+	
+I learned on C++99, C++11/14, C++17 (but gcc 6.4 doesn’t support C++17, #include<experimental>
